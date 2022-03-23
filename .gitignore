@@ -1,0 +1,14 @@
+# Eclipse tmp files
+**/.classpath
+**/.project
+**/.settings/
+**/bin/
+
+# Vim tmp files
+**/*.swp
+
+# Gradle tmp files
+**/.gradle/
+**/build/
+
+/.metadata/

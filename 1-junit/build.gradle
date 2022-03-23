@@ -1,0 +1,33 @@
+
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
+}
+
+
+test {
+    useJUnitPlatform()
+//    useJUnitPlatform {
+//        includeTags 'fast'
+//        excludeTags 'slow', 'veryslow'
+//    }
+	testLogging {
+		events "passed", "skipped", "failed"
+        afterSuite { desc, result ->
+          if (!desc.parent) { // will match the outermost suite
+            println "\nResults: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+          }
+        }
+	}
+}
+
+
