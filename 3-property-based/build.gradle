@@ -1,0 +1,25 @@
+plugins {
+	id 'java'
+	id 'eclipse' // optional (to generate Eclipse project files)
+	//id 'idea' // optional (to generate IntelliJ IDEA project files)
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation(platform('org.junit:junit-bom:5.8.2'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	testImplementation("org.assertj:assertj-core:3.22.0")
+	testImplementation("net.jqwik:jqwik:1.6.5")
+}
+
+test {
+	useJUnitPlatform {
+		includeEngines 'jqwik'
+		testLogging {
+			events "passed", "skipped", "failed"
+		}
+	}
+}
