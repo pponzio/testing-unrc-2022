@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
+import net.jqwik.api.Combinators;
 import net.jqwik.api.EdgeCasesMode;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
@@ -71,7 +72,6 @@ public class EjemplosJqwik {
 	
 	
 	@Property
-	@Report(Reporting.GENERATED)
 	void addExtendsSetPropOwnGen(
 			@ForAll("mySetsOfStrings") MySet<String> set,
 			@ForAll("myStrings") String e) {
@@ -107,6 +107,50 @@ public class EjemplosJqwik {
 			this.addAll(other);
 		}
 		
+	}
+	
+	@Provide 
+	Arbitrary<String> fiveDigitStrings() {
+	  return Arbitraries.integers()
+			  .between(10000, 99999)
+			  .map(aNumber -> String.valueOf(aNumber));
+	}
+	
+	@Property
+	void validPeopleHaveIDs(@ForAll("validPeople") Person aPerson) {
+		assertThat(aPerson.getID()).contains("-");
+	    assertThat(aPerson.getID().length()).isBetween(5, 25);
+	}
+	
+	@Provide
+	Arbitrary<Person> validPeople() {
+	    Arbitrary<String> names = Arbitraries.strings()
+	    		.withCharRange('a', 'z')
+	    		.ofMinLength(3)
+	    		.ofMaxLength(21);
+	    Arbitrary<Integer> ages = Arbitraries.integers()
+	    		.between(0, 130);
+	    return Combinators.combine(names, ages)
+	        .as((name, age) -> new Person(name, age));
+	}
+
+	class Person {
+	    private final String name;
+	    private final int age;
+
+	    public Person(String name, int age) {
+	        this.name = name;
+	        this.age = age;
+	    }
+
+	    public String getID() {
+	        return name + "-" + age;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return String.format("%s:%s", name, age);
+	    }
 	}
 	
 }
