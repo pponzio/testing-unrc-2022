@@ -153,4 +153,12 @@ public class EjemplosJqwik {
 	    }
 	}
 	
+	@Provide
+	Arbitrary<int []> smallNumbersIntArrays() {	
+		return Arbitraries.integers()
+				.between(1, 5)
+				.array(int [].class)
+				.ofMaxSize(10);
+	}
+
 }
