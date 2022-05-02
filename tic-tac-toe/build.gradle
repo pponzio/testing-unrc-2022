@@ -1,0 +1,42 @@
+plugins {
+	id 'java'
+	id 'eclipse' // optional (to generate Eclipse project files)
+	//id 'idea' // optional (to generate IntelliJ IDEA project files)
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation(platform('org.junit:junit-bom:5.8.2'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	testImplementation("org.assertj:assertj-core:3.22.0")
+    testImplementation("org.easymock:easymock:4.2")
+    testImplementation("io.cucumber:cucumber-java:7.0.0")
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testImplementation
+    }
+}
+
+task cucumber() {
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = ['--plugin', 'pretty', '--glue', 'tictactoe', 'src/test/resources']
+        }
+    }
+}
+
+test {
+	useJUnitPlatform {
+		testLogging {
+			events "passed", "skipped", "failed"
+		}
+	}
+}

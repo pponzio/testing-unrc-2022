@@ -1,0 +1,26 @@
+Funcionalidades:
+================
+
+Implementar jugadores:
+  - turno de
+  - ficha con la que juega cada uno
+
+Implementar tablero:
+  - inicialización
+  - poner ficha en 
+  - vacío
+  - lleno
+  - hay ficha en un posición
+
+
+
+
+
+Tests:
+======
+
+Tablero:
+X Crear un tablero de 3x3 vacío
+X Crear un tablero no vacío
+X Poner una ficha arriba de otra
+
