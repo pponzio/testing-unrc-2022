@@ -1,0 +1,59 @@
+plugins {
+	id 'java'
+	id 'eclipse' // optional (to generate Eclipse project files)
+    id 'jacoco'
+    id 'info.solidsoft.pitest' version '1.6.0'
+	//id 'idea' // optional (to generate IntelliJ IDEA project files)
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testImplementation(platform('org.junit:junit-bom:5.8.2'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
+	testImplementation("org.assertj:assertj-core:3.22.0")
+}
+
+test {
+	useJUnitPlatform {
+		testLogging {
+			events "passed", "skipped", "failed"
+		}
+	}
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+/*
+
+// Make build fail if tests don't cover enough code 
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                minimum = 0.87
+            }
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.80
+            }
+        }
+	}
+}
+
+check.dependsOn jacocoTestCoverageVerification
+*/
+
+pitest {
+    targetClasses = ['testing.mutation.*']  //by default "${project.group}.*"
+//    pitestVersion = '1.4.1' //not needed when a default PIT version should be used
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    timestampedReports = false
+    junit5PluginVersion = "0.15"
+}
